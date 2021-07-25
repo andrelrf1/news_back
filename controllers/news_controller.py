@@ -1,12 +1,14 @@
 from flask_restful import Resource
 from models.news_model import NewsModel
 from polices.create_news_polices import validator as create_polices
+from polices.update_news_polices import validator as update_polices
 import json
 
 
 class CreateNews(Resource):
     def post(self):
-        args = create_polices.parse_args()
+        args = create_polices.parse_args(strict=True)
+        print(args)
         data = NewsModel(args['title'], args['sub_title'], args['img_url'] if 'img_url' in args.keys() else None,
                          args['author'], args['is_main_news'], json.dumps(args['tags']), args['news'],
                          json.dumps(args['fonts']))
@@ -52,8 +54,36 @@ class FindNews(Resource):
 
 
 class UpdateNews(Resource):
-    def post(self):
-        pass
+    def put(self, news_id):
+        args = update_polices.parse_args()
+        news = NewsModel.find_news(news_id)
+        if args is None or len(args.keys()) == 0:
+            return {
+                'success': False,
+                'message': 'Nothing sent to update'
+            }
+
+        elif news:
+            for item in args.keys():
+                if item == 'image':
+                    pass
+                elif item == 'tags':
+                    news.tags = json.dumps(args['tags'])
+                elif item == 'fonts':
+                    json.dumps(args['fonts'])
+                else:
+                    setattr(news, item, args[item])
+
+            news.save_news()
+            return {
+                'success': True
+            }
+
+        else:
+            return {
+                       'success': False,
+                       'data': 'News not found'
+                   }, 400
 
 
 class DeleteNews(Resource):

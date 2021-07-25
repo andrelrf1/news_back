@@ -1,3 +1,4 @@
+from typing import Union
 from models import db
 
 
@@ -39,7 +40,7 @@ class NewsModel(db.Model):
         }
 
     @classmethod
-    def find_news(cls, news_id):
+    def find_news(cls, news_id) -> Union['NewsModel', None]:
         news = cls.query.filter_by(id=news_id).first()
         if news:
             return news
@@ -48,14 +49,14 @@ class NewsModel(db.Model):
             return None
 
     @classmethod
-    def find_all(cls):
+    def find_all(cls) -> list['NewsModel']:
         news = cls.query.all()
         return news
 
-    def save_news(self):
+    def save_news(self) -> None:
         db.session.add(self)
         db.session.commit()
 
-    def delete_news(self):
+    def delete_news(self) -> None:
         db.session.delete(self)
         db.session.commit()

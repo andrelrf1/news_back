@@ -1,3 +1,17 @@
-<h1>Back-end do projeto de notícias</h1>
+# News project back-end
 
-<b>Projeto usando Python 3.9.6</b>
+# Project requirements
+- Python 3.9
+
+# Project setup
+```
+py -m venv venv
+venv/Scripts/activate
+pip install -r requirements.txt
+```
+
+
+# Run project
+```
+py main.py
+```

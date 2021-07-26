@@ -2,17 +2,22 @@ from flask_restful import Resource
 from models.news_model import NewsModel
 from polices.create_news_polices import validator as create_polices
 from polices.update_news_polices import validator as update_polices
+from storage.firebase_storage import FileStorage
 import json
 
 
 class CreateNews(Resource):
     def post(self):
         args = create_polices.parse_args(strict=True)
-        print(args)
-        data = NewsModel(args['title'], args['sub_title'], args['img_url'] if 'img_url' in args.keys() else None,
-                         args['author'], args['is_main_news'], json.dumps(args['tags']), args['news'],
-                         json.dumps(args['fonts']))
+        result = None
+        if 'image' in args.keys() and args['image'] is not None:
+            storage = FileStorage()
+            result = storage.upload_file(args['image'], args['image'].content_type)
+
+        data = NewsModel(args['title'], args['sub_title'], result, args['author'], args['is_main_news'],
+                         json.dumps(args['tags']), args['news'], json.dumps(args['fonts']))
         data.save_news()
+
         return {'success': True}
 
 

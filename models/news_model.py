@@ -7,7 +7,7 @@ class NewsModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(150), nullable=False)
-    sub_title = db.Column(db.String(200), nullable=False)
+    subtitle = db.Column(db.String(200), nullable=False)
     img_url = db.Column(db.Text)
     author = db.Column(db.String(75), nullable=False)
     is_main_news = db.Column(db.Boolean, nullable=False)
@@ -15,10 +15,10 @@ class NewsModel(db.Model):
     news = db.Column(db.Text, nullable=False)
     fonts = db.Column(db.Text, nullable=False)
 
-    def __init__(self, title: str, sub_title: str, img_url: str, author: str, is_main_news: bool, tags: str, news: str,
+    def __init__(self, title: str, subtitle: str, img_url: str, author: str, is_main_news: bool, tags: str, news: str,
                  fonts: str):
         self.title = title
-        self.sub_title = sub_title
+        self.subtitle = subtitle
         self.img_url = img_url
         self.author = author
         self.is_main_news = is_main_news
@@ -30,7 +30,7 @@ class NewsModel(db.Model):
         return {
             'id': self.id,
             'title': self.title,
-            'sub_title': self.sub_title,
+            'subtitle': self.subtitle,
             'img_url': self.img_url,
             'author': self.author,
             'is_main_news': self.is_main_news,

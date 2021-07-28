@@ -14,7 +14,7 @@ class CreateNews(Resource):
             storage = FileStorage()
             result = storage.upload_file(args['image'], args['image'].content_type)
 
-        data = NewsModel(args['title'], args['sub_title'], result, args['author'], args['is_main_news'],
+        data = NewsModel(args['title'], args['subtitle'], result, args['author'], args['is_main_news'],
                          json.dumps(args['tags']), args['news'], json.dumps(args['fonts']))
         data.save_news()
 
@@ -62,22 +62,28 @@ class UpdateNews(Resource):
     def put(self, news_id):
         args = update_polices.parse_args()
         news = NewsModel.find_news(news_id)
-        if args is None or len(args.keys()) == 0:
+        if all([x is None for x in args.values()]):
             return {
-                'success': False,
-                'message': 'Nothing sent to update'
-            }
+                       'success': False,
+                       'message': 'Nothing sent to update'
+                   }, 400
 
         elif news:
             for item in args.keys():
-                if item == 'image':
-                    pass
-                elif item == 'tags':
-                    news.tags = json.dumps(args['tags'])
-                elif item == 'fonts':
-                    json.dumps(args['fonts'])
-                else:
-                    setattr(news, item, args[item])
+                if args[item] is not None:
+                    if item == 'image':
+                        storage = FileStorage()
+                        result = storage.upload_file(args['image'], args['image'].content_type)
+                        news.img_url = result
+
+                    elif item == 'tags':
+                        news.tags = json.dumps(args['tags'])
+
+                    elif item == 'fonts':
+                        news.fonts = json.dumps(args['fonts'])
+
+                    else:
+                        setattr(news, item, args[item])
 
             news.save_news()
             return {

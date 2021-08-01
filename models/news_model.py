@@ -11,18 +11,20 @@ class NewsModel(db.Model):
     img_url = db.Column(db.Text)
     author = db.Column(db.String(75), nullable=False)
     is_main_news = db.Column(db.Boolean, nullable=False)
-    tags = db.Column(db.Text, nullable=False)
+    theme = db.Column(db.String(20), nullable=False)
+    news_format = db.Column(db.String(20), nullable=False)
     news = db.Column(db.Text, nullable=False)
     fonts = db.Column(db.Text, nullable=False)
 
-    def __init__(self, title: str, subtitle: str, img_url: str, author: str, is_main_news: bool, tags: str, news: str,
-                 fonts: str):
+    def __init__(self, title: str, subtitle: str, img_url: str, author: str, is_main_news: bool, theme: str,
+                 news_format: str, news: str, fonts: str):
         self.title = title
         self.subtitle = subtitle
         self.img_url = img_url
         self.author = author
         self.is_main_news = is_main_news
-        self.tags = tags
+        self.theme = theme
+        self.news_format = news_format
         self.news = news
         self.fonts = fonts
 
@@ -34,7 +36,8 @@ class NewsModel(db.Model):
             'img_url': self.img_url,
             'author': self.author,
             'is_main_news': self.is_main_news,
-            'tags': self.tags,
+            'theme': self.theme,
+            'format': self.news_format,
             'news': self.news,
             'fonts': self.fonts
         }

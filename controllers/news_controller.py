@@ -14,8 +14,8 @@ class CreateNews(Resource):
             storage = FileStorage()
             result = storage.upload_file(args['image'], args['image'].content_type)
 
-        data = NewsModel(args['title'], args['subtitle'], result, args['author'], args['is_main_news'],
-                         json.dumps(args['tags']), args['news'], json.dumps(args['fonts']))
+        data = NewsModel(args['title'], args['subtitle'], result, args['author'], args['is_main_news'], args['theme'],
+                         args['format'], args['news'], json.dumps(args['fonts']))
         data.save_news()
 
         return {'success': True}
@@ -28,7 +28,6 @@ class ListNews(Resource):
 
         for news in result:
             this_news = news.to_json()
-            this_news['tags'] = json.loads(this_news['tags'])
             this_news['fonts'] = json.loads(this_news['fonts'])
             data.append(this_news)
 
@@ -44,7 +43,6 @@ class FindNews(Resource):
 
         if news:
             this_news = news.to_json()
-            this_news['tags'] = json.loads(this_news['tags'])
             this_news['fonts'] = json.loads(this_news['fonts'])
 
             return {
@@ -75,9 +73,6 @@ class UpdateNews(Resource):
                         storage = FileStorage()
                         result = storage.upload_file(args['image'], args['image'].content_type)
                         news.img_url = result
-
-                    elif item == 'tags':
-                        news.tags = json.dumps(args['tags'])
 
                     elif item == 'fonts':
                         news.fonts = json.dumps(args['fonts'])

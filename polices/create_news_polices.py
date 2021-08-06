@@ -11,3 +11,4 @@ validator.add_argument('theme', type=str, required=True, help='type String, this
 validator.add_argument('format', type=str, required=True, help='type String, this argument is required')
 validator.add_argument('news', type=str, required=True, help='type String, this argument is required')
 validator.add_argument('fonts', action='append', required=True, help='type List, this argument is required')
+validator.add_argument('read_time', type=int, required=True, help='type int, this argument is required')

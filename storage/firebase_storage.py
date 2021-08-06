@@ -19,3 +19,8 @@ class FileStorage:
         blob.make_public()
 
         return f'https://storage.googleapis.com/news-storage-ea132.appspot.com/{file_blob}'
+
+    def delete_file(self, url: str) -> None:
+        bucket = storage.bucket()
+        blob = bucket.blob(url.split('/')[-1])
+        blob.delete()

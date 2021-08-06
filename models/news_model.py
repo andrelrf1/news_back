@@ -15,9 +15,10 @@ class NewsModel(db.Model):
     news_format = db.Column(db.String(20), nullable=False)
     news = db.Column(db.Text, nullable=False)
     fonts = db.Column(db.Text, nullable=False)
+    read_time = db.Column(db.Integer, nullable=False)
 
     def __init__(self, title: str, subtitle: str, img_url: str, author: str, is_main_news: bool, theme: str,
-                 news_format: str, news: str, fonts: str):
+                 news_format: str, news: str, fonts: str, read_time: int):
         self.title = title
         self.subtitle = subtitle
         self.img_url = img_url
@@ -27,6 +28,7 @@ class NewsModel(db.Model):
         self.news_format = news_format
         self.news = news
         self.fonts = fonts
+        self.read_time = read_time
 
     def to_json(self) -> dict:
         return {
@@ -39,7 +41,8 @@ class NewsModel(db.Model):
             'theme': self.theme,
             'format': self.news_format,
             'news': self.news,
-            'fonts': self.fonts
+            'fonts': self.fonts,
+            'read_time': self.read_time
         }
 
     @classmethod
@@ -54,6 +57,11 @@ class NewsModel(db.Model):
     @classmethod
     def find_all(cls) -> list['NewsModel']:
         news = cls.query.all()
+        return news
+
+    @classmethod
+    def find_main_news(cls) -> Union['NewsModel', None]:
+        news = cls.query.filter_by(is_main_news=True).first()
         return news
 
     def save_news(self) -> None:

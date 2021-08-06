@@ -47,7 +47,7 @@ class ListNews(Resource):
 
 class FindNews(Resource):
     def get(self, news_id):
-        news = NewsModel.find_news(news_id)
+        news = NewsModel.find_news(str(news_id))
 
         if news:
             this_news = news.to_json()
@@ -60,7 +60,7 @@ class FindNews(Resource):
 
         return {
             'success': True,
-            'data': None
+            'data': []
         }
 
 
@@ -73,7 +73,7 @@ class UpdateNews(Resource):
                        'message': 'Nothing sent to update'
                    }, 400
 
-        news = NewsModel.find_news(news_id)
+        news = NewsModel.find_news(str(news_id))
         if news:
             for item in args.keys():
                 if args[item] is not None:
@@ -112,7 +112,7 @@ class UpdateNews(Resource):
 
 class DeleteNews(Resource):
     def delete(self, news_id):
-        news = NewsModel.find_news(news_id)
+        news = NewsModel.find_news(str(news_id))
         if news:
             if news.img_url:
                 storage = FileStorage()

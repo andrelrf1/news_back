@@ -2,6 +2,7 @@ from flask_restful import Resource
 from models.news_model import NewsModel
 from polices.create_news_polices import validator as create_polices
 from polices.update_news_polices import validator as update_polices
+from polices.upload_image_polices import validator as upload_image_polices
 from storage.firebase_storage import FileStorage
 import json
 
@@ -126,3 +127,14 @@ class DeleteNews(Resource):
                        'success': False,
                        'message': 'news not found'
                    }, 400
+
+
+class UploadImage(Resource):
+    def post(self):
+        args = upload_image_polices.parse_args()
+        storage = FileStorage()
+        url = storage.upload_file(args['image'], args['image'].content_type)
+        return {
+            "success": True,
+            "url": url
+        }
